@@ -1,0 +1,553 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>be1.ru</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>🔒 ХАКЕРСКОЕ ПРИГЛАШЕНИЕ | ДОСТУП К ДНЮ РОЖДЕНИЯ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background: radial-gradient(circle at 20% 30%, #001a00, #000000);
+            font-family: 'Courier New', 'Fira Code', 'Monaco', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            position: relative;
+            overflow-x: hidden;
+            color: #ffffff; /* основной цвет текста — белый */
+        }
+
+        #matrixCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.28;
+            pointer-events: none;
+        }
+
+        .terminal-window {
+            position: relative;
+            z-index: 2;
+            max-width: 950px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(3px);
+            border: 2px solid #0f0;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3), inset 0 0 10px rgba(0, 255, 0, 0.1);
+            padding: 20px 22px 30px 22px;
+            color: #ffffff; /* белый текст внутри терминала */
+        }
+
+        .glitch {
+            animation: glitchPulse 1.2s infinite ease-in-out;
+            text-shadow: 0 0 3px #0f0, 0 0 1px #0f0;
+            color: #0f0; /* зелёный для глитч-эффекта */
+        }
+
+        @keyframes glitchPulse {
+            0% { opacity: 0.9; text-shadow: -2px 0 #0f0, 2px 0 #00aa00; }
+            50% { opacity: 1; text-shadow: 2px 0 #0f0, -2px 0 #00ff88; }
+            100% { opacity: 0.9; text-shadow: -1px 0 #0f0, 1px 0 #00aa00; }
+        }
+
+        .equation {
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-align: center;
+            background: #021a02;
+            padding: 16px 12px;
+            border-radius: 12px;
+            letter-spacing: 2px;
+            border-left: 6px solid #0f0;
+            border-right: 6px solid #0f0;
+            margin: 20px 0;
+            color: #0f0; /* зелёное уравнение */
+            word-break: break-word;
+            animation: borderPulse 2s infinite;
+        }
+
+        @keyframes borderPulse {
+            0% { border-color: #0f0; box-shadow: 0 0 5px #0f0; }
+            50% { border-color: #2eff2e; box-shadow: 0 0 15px #0f0; }
+            100% { border-color: #0f0; box-shadow: 0 0 5px #0f0; }
+        }
+
+        input, button {
+            background: #0a0f0a;
+            border: 1.5px solid #1f9e1f;
+            color: #b3ffb3; /* светло-зелёный для полей ввода и кнопок */
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            padding: 12px 16px;
+            margin: 8px 8px 8px 0;
+            border-radius: 8px;
+            transition: 0.25s;
+            font-weight: bold;
+        }
+
+        input {
+            flex: 2;
+            min-width: 160px;
+            letter-spacing: 1px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0f0;
+            box-shadow: 0 0 12px #0f0;
+            background: #000;
+            color: #ffffff;
+        }
+
+        button {
+            cursor: pointer;
+            background: #011001;
+        }
+
+        button:hover {
+            background: #0f0;
+            color: #000;
+            box-shadow: 0 0 14px #0f0;
+            border-color: #0f0;
+            transform: scale(1.02);
+        }
+
+        .check-panel {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .hint-corner {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 99;
+        }
+
+        .hint-btn {
+            background: #000000cc;
+            border: 3px solid #0f0;
+            border-radius: 60px;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            backdrop-filter: blur(8px);
+            cursor: pointer;
+            font-family: monospace;
+            color: #0f0;
+            transition: 0.2s;
+            box-shadow: 0 0 12px #0f0;
+            letter-spacing: 2px;
+        }
+
+        .hint-btn:hover {
+            background: #0f0;
+            color: black;
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #2eff2e;
+        }
+
+        .toast-notify {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            left: auto;
+            background: #030c03;
+            border-left: 8px solid #0f0;
+            border-radius: 8px;
+            padding: 10px 18px;
+            color: #c5ffc5; /* светло-зелёный для тостов */
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 0.9rem;
+            z-index: 200;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
+            backdrop-filter: blur(10px);
+            animation: fadeOutToast 3s forwards;
+            pointer-events: none;
+            max-width: 85vw;
+            word-break: break-word;
+        }
+
+        @keyframes fadeOutToast {
+            0% { opacity: 1; transform: translateX(0); }
+            70% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(30px); visibility: hidden; }
+        }
+
+        .invitation-card {
+            background: #010d01;
+            border: 2px solid #0f0;
+            border-radius: 28px;
+            padding: 20px;
+            margin-top: 15px;
+            animation: terminalAppear 0.5s cubic-bezier(0.2, 1.2, 0.4, 1);
+            box-shadow: 0 0 35px rgba(0,255,0,0.2);
+            color: #ffffff; /* белый текст внутри приглашения */
+        }
+
+        @keyframes terminalAppear {
+            0% { opacity: 0; transform: scale(0.96) translateY(35px); filter: blur(4px);}
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0);}
+        }
+
+        .address-line {
+            background: #0c1e0c;
+            padding: 12px;
+            border-radius: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .address-text {
+            font-family: monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            color: #ffffff; /* белый адрес */
+        }
+
+        .copy-addr-btn {
+            background: #000;
+            border: 1px solid #3aff3a;
+            padding: 6px 14px;
+            font-size: 0.8rem;
+            color: #b3ffb3;
+        }
+
+        hr {
+            border-color: #0f0;
+            margin: 15px 0;
+        }
+
+        .phone-link {
+            color: #0f0;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px dashed #0f0;
+        }
+
+        .phone-link:hover {
+            text-shadow: 0 0 5px #0f0;
+        }
+
+        .cursor-blink::after {
+            content: "█";
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0.6;
+            color: #cccccc;
+        }
+
+        /* дополнительно делаем все параграфы и текстовые блоки белыми */
+        p, li, span:not(.glitch):not(.equation):not(.hint-btn):not(.toast-notify) {
+            color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; align-items: flex-start; }
+            .terminal-window { padding: 16px; }
+            .equation { font-size: 1.3rem; padding: 12px 8px; }
+            .check-panel { flex-direction: column; align-items: stretch; gap: 8px; }
+            input, button { width: 100%; margin: 4px 0; }
+            .hint-btn { padding: 8px 16px; font-size: 1rem; }
+            .toast-notify { bottom: 80px; right: 16px; left: 16px; max-width: calc(100% - 32px); }
+            .invitation-card { padding: 16px; }
+            .address-line { flex-direction: column; align-items: flex-start; }
+            .copy-addr-btn { width: 100%; text-align: center; }
+            h2.glitch { font-size: 1.4rem !important; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<div class="hint-corner">
+    <button id="globalHintBtn" class="hint-btn">💡 ПОДСКАЗКА</button>
+</div>
+
+<div class="terminal-window">
+    <div id="authZone">
+        <div id="equationBlock">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+                <span class="glitch">⚡[SYSTEM_LOCK]⚡</span>
+                <span style="font-size:0.9rem; color: #ffffff;">››› требуется верификация ‹‹‹</span>
+            </div>
+            <p style="font-size:1rem;">🔐 Доступ к зашифрованному приглашению возможен только после решения:</p>
+            <div class="equation" id="equationDisplay">x² - 5x + 6 = 0</div>
+            <div class="check-panel">
+                <input type="text" id="answerInput" placeholder="Введите корни (например: 2 3  или 2,3)" autocomplete="off">
+                <button id="verifyBtn">🚀 ПРОВЕРИТЬ ДОСТУП</button>
+            </div>
+            <div id="inlineMsg" style="margin-top: 14px; font-size:0.9rem; min-height: 45px; color: #ff7777;"></div>
+            <footer># хакерский режим • введи оба корня</footer>
+        </div>
+        <div id="invitationBlock" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        // ---------- ДАННЫЕ ----------
+        let currentRoots = { r1: null, r2: null };
+
+        // ---------- ГЕНЕРАЦИЯ УРАВНЕНИЯ ----------
+        function generateRandomQuadratic() {
+            let a = Math.floor(Math.random() * 9) - 4;
+            let b = Math.floor(Math.random() * 9) - 4;
+            let root1 = a, root2 = b;
+            let sum = root1 + root2;
+            let prod = root1 * root2;
+            let coeffB = -sum;
+            let coeffC = prod;
+            let eq = "x²";
+            if (coeffB !== 0) {
+                if (coeffB > 0) eq += ` + ${coeffB === 1 ? '' : coeffB}x`;
+                else eq += ` - ${Math.abs(coeffB) === 1 ? '' : Math.abs(coeffB)}x`;
+            }
+            if (coeffC !== 0) {
+                if (coeffC > 0) eq += ` + ${coeffC}`;
+                else eq += ` - ${Math.abs(coeffC)}`;
+            }
+            eq += " = 0";
+            eq = eq.replace(/\+ 1x/g, '+ x').replace(/- 1x/g, '- x');
+            return { root1, root2, equation: eq };
+        }
+
+        function refreshEquation() {
+            const { root1, root2, equation } = generateRandomQuadratic();
+            currentRoots.r1 = root1;
+            currentRoots.r2 = root2;
+            const eqDiv = document.getElementById('equationDisplay');
+            if (eqDiv) eqDiv.innerText = equation;
+        }
+
+        // ---------- TOAST ----------
+        function showToastMessage(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = 'toast-notify';
+            toast.style.borderLeftColor = isError ? '#ff4444' : '#0f0';
+            toast.style.color = isError ? '#ffbbbb' : '#b3ffb3';
+            toast.innerText = `🔻 ${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ---------- ПРОВЕРКА КОРНЕЙ ----------
+        function parseUserRoots(inputStr) {
+            const regex = /-?\d+/g;
+            const matches = [...inputStr.matchAll(regex)];
+            return matches.map(m => parseInt(m[0], 10));
+        }
+
+        function areRootsCorrect(enteredNumbers) {
+            if (!enteredNumbers.length) return false;
+            const r1 = currentRoots.r1, r2 = currentRoots.r2;
+            let unique = [...new Set(enteredNumbers)].sort((x,y)=>x-y);
+            let correct = [r1, r2].sort((x,y)=>x-y);
+            if (r1 === r2) {
+                return (unique.length === 1 && unique[0] === r1);
+            } else {
+                return (unique.length === 2 && unique[0] === correct[0] && unique[1] === correct[1]);
+            }
+        }
+
+        // ---------- ОБРАБОТЧИК ПРОВЕРКИ ----------
+        function onVerify() {
+            const inputField = document.getElementById('answerInput');
+            const rawValue = inputField.value.trim();
+            if (rawValue === "") {
+                showToastMessage("Введите корни уравнения, хакер!", true);
+                return;
+            }
+            const numbers = parseUserRoots(rawValue);
+            if (numbers.length === 0) {
+                showToastMessage("Не обнаружено чисел! Введи корни через пробел или запятую.", true);
+                return;
+            }
+            if (numbers.length === 1 && currentRoots.r1 !== currentRoots.r2) {
+                showToastMessage(`Нужно ввести оба корня! (Например: ${currentRoots.r1} и ${currentRoots.r2})`, true);
+                return;
+            }
+            if (areRootsCorrect(numbers)) {
+                document.getElementById('equationBlock').style.display = 'none';
+                renderInvitationCard();
+                showToastMessage("✅ ДОСТУП ОТКРЫТ! Приглашение загружено...");
+            } else {
+                showToastMessage(`❌ Неверный ответ. Используй подсказку (кнопка справа внизу)`, true);
+                const msgDiv = document.getElementById('inlineMsg');
+                if(msgDiv) msgDiv.innerHTML = '<span style="color:#ff7777;">⚡ Доступ запрещён! Попробуй снова ⚡</span>';
+                setTimeout(() => { if(msgDiv) msgDiv.innerHTML = ''; }, 1800);
+            }
+        }
+
+        // ---------- ПОДСКАЗКА ----------
+        function showHintAction() {
+            const r1 = currentRoots.r1, r2 = currentRoots.r2;
+            let hintText = (r1 === r2) 
+                ? `📡 [СИСТЕМА] Уравнение имеет один корень (кратный): x = ${r1}. Введи число ${r1}.`
+                : `💀 [ХАК-ПОДСКАЗКА] Корни: x₁ = ${r1} , x₂ = ${r2}. Введи оба через пробел или запятую.`;
+            showToastMessage(hintText);
+            const inputEl = document.getElementById('answerInput');
+            if(inputEl) {
+                inputEl.style.borderColor = '#ffff66';
+                setTimeout(() => { if(inputEl) inputEl.style.borderColor = '#1f9e1f'; }, 700);
+            }
+        }
+
+        // ---------- ОТРИСОВКА ПРИГЛАШЕНИЯ ----------
+        function renderInvitationCard() {
+            const container = document.getElementById('invitationBlock');
+            if (!container) return;
+            container.innerHTML = `
+                <div class="invitation-card">
+                    <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap;">
+                        <h2 class="glitch" style="font-size: 1.8rem;">🎂 СЕКРЕТНОЕ ПРИГЛАШЕНИЕ 🎂</h2>
+                        <span style="font-size: 0.8rem; color: #cccccc;">[Взлом успешен]</span>
+                    </div>
+                    <p>🔓 <strong>Дорогой друг, хакер и соратник!</strong> Ты прошел цифровой квест, и теперь с гордостью сообщаем:</p>
+                    <p>🎉 <strong>Ты приглашен на эпический День Рождения!</strong> 🎉</p>
+                    <p>📅 <strong>Дата:</strong> 22 июня (сбор в <strong>15:00</strong>)<br>
+                    🌆 Вечеринка пройдет в настоящем лофте с восточным стилем.</p>
+                    <div class="address-line">
+                        <span class="address-text">📍 <strong>АДРЕС:</strong> наб. Обводного канала, 80, Санкт-Петербург, 196084 (этаж 3)</span>
+                        <button id="copyAddressDynamicBtn" class="copy-addr-btn">📋 КОПИРОВАТЬ АДРЕС</button>
+                    </div>
+                    <p>🍢 <strong>Программа фуд-марафона:</strong><br>
+                    • С 15:00 до 17:00 — лёгкие <strong>снэки, закуски и напитки</strong> (чипсы, фруктовая тарелка и т.д.).<br>
+                    • Примерно с <strong>17:00</strong> стартует <strong>полноценная еда</strong><br>
+                    • Атмосфера: чилловая музыка, кибер-декор и приставки.</p>
+                    <p>🎁 <strong>Что с собой взять?</strong> Хорошее настроение, улыбку, и, конечно, подарок для именинника! Любой сюрприз или даже просто открытка от души — будет в радость (форма одежды свободная)</p>
+                    <p>📞 <strong>По любым вопросам</strong> (как добраться, пожелания по еде и т.д.) смело пиши или звони:<br>
+                    <a href="tel:+79313449548" class="phone-link">📱 +7 (931) 344-95-48</a> (Именинник/организатор).</p>
+                    <hr>
+                    <p><em>⚡ "Код приглашения активирован" ⚡ Ждем именно тебя! Будет много смеха, сюрпризов и хакерских плюшек.<br>
+                    Не опаздывай, иначе придется решать еще одно уравнение 😉</em></p>
+                    <footer style="opacity:0.7; margin-top: 10px;">#CyberBirthday #22Июня #ХакерыВОтрыве</footer>
+                </div>
+            `;
+            container.style.display = 'block';
+            const copyBtn = document.getElementById('copyAddressDynamicBtn');
+            if (copyBtn) {
+                const fullAddress = "наб. Обводного канала, 80, Санкт-Петербург, 196084 (этаж 3)";
+                copyBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    navigator.clipboard.writeText(fullAddress).then(() => {
+                        showToastMessage("📍 Адрес скопирован в буфер! Ждём тебя!");
+                    }).catch(() => {
+                        showToastMessage("Не удалось скопировать адрес вручную, но вот он: " + fullAddress, true);
+                    });
+                });
+            }
+        }
+
+        // ---------- МАТРИЧНАЯ АНИМАЦИЯ ----------
+        let animFrame = null;
+        function initMatrixRain() {
+            const canvas = document.getElementById('matrixCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+            
+            const chars = "01アイウエオカキクケコABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()_+[]{};:<>?/\\|~`";
+            const fontSize = 14;
+            let columns = Math.floor(width / fontSize);
+            let drops = new Array(columns).fill(1);
+            
+            function draw() {
+                if (!ctx) return;
+                ctx.fillStyle = "rgba(0, 0, 0, 0.045)";
+                ctx.fillRect(0, 0, width, height);
+                ctx.fillStyle = "#0f0";
+                ctx.font = `${fontSize}px 'Courier New', monospace`;
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    const x = i * fontSize;
+                    const y = drops[i] * fontSize;
+                    ctx.fillText(text, x, y);
+                    if (y > height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+                animFrame = requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        // ---------- ЗАПУСК ----------
+        function start() {
+            refreshEquation();
+initMatrixRain();
+            const verifyBtn = document.getElementById('verifyBtn');
+            const hintBtn = document.getElementById('globalHintBtn');
+            const answerInput = document.getElementById('answerInput');
+            if (verifyBtn) verifyBtn.addEventListener('click', onVerify);
+            if (hintBtn) hintBtn.addEventListener('click', showHintAction);
+            if (answerInput) {
+                answerInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') onVerify();
+                });
+                answerInput.addEventListener('focus', () => answerInput.classList.add('cursor-blink'));
+                answerInput.addEventListener('blur', () => answerInput.classList.remove('cursor-blink'));
+            }
+            setTimeout(() => {
+                showToastMessage("💀 Система онлайн. Реши квадратное уравнение для доступа к приглашению 💀");
+            }, 500);
+        }
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', start);
+        } else {
+            start();
+        }
+    })();
+</script>
+</body>
+</html>
+</body>
+</html>
